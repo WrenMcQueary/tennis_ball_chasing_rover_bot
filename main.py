@@ -1,4 +1,4 @@
-"""Script for a robot that chases a ball and knocks it in a semirandom direction to play with my dog."""
+"""Script for a robot that chases a ball and knocks it in a semirandom direction to play with a dog."""
 
 #
 # IMPORTS
@@ -171,52 +171,12 @@ def get_ball_position() -> Union[int, None]:
     # TODO
 
 
-def set_motors(throttle_l: int, throttle_r: int) -> None:   # TODO
-    """Given intuitive "throttle values" for the left and right motors, set their voltages accordingly.
-    :param throttle_l: left motor, anywhere from -100 - 100 (inclusive).  -100 is full reverse, 100 is full forward.
-    :param throttle_r: right motor, anywhere from -100 - 100 (inclusive).  -100 is full reverse, 100 is full forward.
-    :return:
-    """
-    global in1_pin
-    global in2_pin
-    global in3_pin
-    global in4_pin
-    # Handle exceptions
-    if throttle_l not in [-100, 0, 100] or throttle_r not in [-100, 0, 100]:
-        raise ValueError("throttle_l and throttle_r must each be -100, 0, or 100")
-
-    # Set left motor
-    if throttle_l == -100:
-        GPIO.output(in1_pin, GPIO.LOW)
-        GPIO.output(in2_pin, GPIO.HIGH)
-    elif throttle_l == 0:
-        GPIO.output(in1_pin, GPIO.LOW)
-        GPIO.output(in2_pin, GPIO.LOW)
-    elif throttle_l == 100:
-        GPIO.output(in1_pin, GPIO.HIGH)
-        GPIO.output(in2_pin, GPIO.LOW)
-
-    # Set right motor
-    if throttle_r == -100:
-        GPIO.output(in4_pin, GPIO.LOW)
-        GPIO.output(in3_pin, GPIO.HIGH)
-    elif throttle_r == 0:
-        GPIO.output(in4_pin, GPIO.LOW)
-        GPIO.output(in3_pin, GPIO.LOW)
-    elif throttle_r == 100:
-        GPIO.output(in4_pin, GPIO.HIGH)
-        GPIO.output(in3_pin, GPIO.LOW)
-
-
 #
 # MAIN SCRIPT
 #
 # Set up pins
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(in1_pin, GPIO.OUT)    # Goes to In1 on motor driver
-GPIO.setup(in2_pin, GPIO.OUT)    # Goes to In2 on motor driver
-GPIO.setup(in3_pin, GPIO.OUT)    # Goes to In3 on motor driver
-GPIO.setup(in4_pin, GPIO.OUT)    # Goes to In4 on motor driver
+rover = Robot(left=(8,7), right=(10,9))
 GPIO.setup(speaker_pin, GPIO.OUT)    # Goes to speaker
 
 # Set up the camera
