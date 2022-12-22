@@ -22,18 +22,18 @@ from picamera import PiCamera
 #
 # USER-SET PARAMETERS
 #
-maximum_search_time = 30  # seconds
-ball_centered_error_tolerance = 30  # pixels
-wait_time = 10  # seconds
-help_tone = 1000    # Hz
+MAXIMUM_SEARCH_TIME = 30  # seconds
+BALL_CENTERED_ERROR_TOLERANCE = 30  # pixels
+WAIT_TIME = 10  # seconds
+HELP_FREQ_HZ = 1000    # Hz
 
-in1_pin = 17
-in2_pin = 27
-in3_pin = 23
-in4_pin = 24
-speaker_pin = 18
+IN1_PIN = 17
+IN2_PIN = 27
+IN3_PIN = 23
+IN4_PIN = 24
+SPEAKER_PIN = 18
 
-picture_file_name = "rover_picture.jpg"
+PICTURE_FILENAME = "rover_picture.jpg"
 
 
 #
@@ -108,7 +108,7 @@ def search_func() -> str:   # TODO
     If ball found, return "Ball found" as soon as it's found.
     If search time exceeded maximum, then return "Search time exceeded maximum"
     """
-    global maximum_search_time
+    global MAXIMUM_SEARCH_TIME
     pass
 
 
@@ -117,7 +117,7 @@ def aim_func() -> str:  # TODO
     If can't center ball, return "Ball not centered"
     If successfully center ball, return "Ball centered"
     """
-    global ball_centered_error_tolerance
+    global BALL_CENTERED_ERROR_TOLERANCE
     pass
 
 
@@ -127,7 +127,7 @@ def charge_func() -> str:   # TODO
     If ball is not centered, then return "Ball lost or not centered"
     If motors stalling, then return "Motors stalling"
     """
-    global ball_centered_error_tolerance
+    global BALL_CENTERED_ERROR_TOLERANCE
     pass
 
 
@@ -136,8 +136,8 @@ def wait_func() -> str:
     Then, if ball is in camera (not necessarily centered), return "Ball found".
     If ball not in camera, return "Ball lost"
     """
-    global wait_time
-    time.sleep(wait_time)
+    global WAIT_TIME
+    time.sleep(WAIT_TIME)
     if get_ball_position() is None:
         return "Ball lost"
     else:
@@ -148,9 +148,9 @@ def request_help_func() -> None:
     """Make a friendly barking sound, to indicate to a human that the rover is blocked from reaching the ball, or can't
     find it.  Remain in this state forever.
     """
-    global speaker_pin
-    global help_tone
-    pwm = GPIO.PWM(speaker_pin, help_tone)
+    global SPEAKER_PIN
+    global HELP_FREQ_HZ
+    pwm = GPIO.PWM(SPEAKER_PIN, HELP_FREQ_HZ)
     pwm.start(50)   # Duty cycle of 50%
     while True:
         time.sleep(60)
@@ -164,9 +164,9 @@ def get_ball_position() -> Union[int, None]:
     of the ball, in pixels.  x = 0 indicates a leftmost pixel.  If no ball is found, return None.
     """
     global my_camera
-    global picture_file_name
+    global PICTURE_FILENAME
     # Check the camera
-    my_camera.capture(picture_file_name)
+    my_camera.capture(PICTURE_FILENAME)
     # Find and return the centroid of the tennis ball, if one exists.  Else return None.
     # TODO
 
@@ -177,7 +177,7 @@ def get_ball_position() -> Union[int, None]:
 # Set up pins
 GPIO.setmode(GPIO.BCM)
 rover = Robot(left=(8,7), right=(10,9))
-GPIO.setup(speaker_pin, GPIO.OUT)    # Goes to speaker
+GPIO.setup(SPEAKER_PIN, GPIO.OUT)    # Goes to speaker
 
 # Set up the camera
 my_camera = PiCamera()
@@ -190,4 +190,4 @@ node_wait = Node("WAIT", {Transition("Ball found", "AIM"), Transition("Ball lost
 node_request_help = Node("REQUEST HELP", set(), request_help_func)
 
 # Start running the finite-state machine!
-#rover_DFSM.run_dfsm()  # TODO: Uncomment this line
+rover_DFSM.run_dfsm()
