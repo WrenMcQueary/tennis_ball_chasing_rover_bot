@@ -33,8 +33,7 @@ IN3_PIN = 23
 IN4_PIN = 24
 SPEAKER_PIN = 18
 
-PICTURE_FILENAME = "rover_picture.jpg"
-PICTURE_WIDTH = 3280
+PICTURE_WIDTH = 1024
 
 
 #
@@ -44,9 +43,6 @@ PICTURE_WIDTH = 3280
 GPIO.setmode(GPIO.BCM)
 rover = Robot(left=(8,7), right=(10,9))
 GPIO.setup(SPEAKER_PIN, GPIO.OUT)    # Goes to speaker
-
-# Set up the camera
-my_camera = PiCamera()
 
 # Build the finite-state machine for the rover.
 node_search = Node("SEARCH", {Transition("Ball not found", "SEARCH"), Transition("Ball found", "AIM"), Transition("Search time exceeded maximum", "REQUEST HELP")}, search_func)
