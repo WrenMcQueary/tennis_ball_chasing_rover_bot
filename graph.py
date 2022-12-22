@@ -3,6 +3,7 @@
 
 
 from typing import Set, List, Callable, Union
+from gpiozero import Robot
 
 
 class Transition:
